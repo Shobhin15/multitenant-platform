@@ -49,9 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Trivy
-        run: |
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \
-            | sudo sh -s -- -b /usr/local/bin          trivy --version
       - name: Trivy config scan (Terraform and Kubernetes misconfigurations)
-        run: trivy config --severity HIGH,CRITICAL --exit-code 1 .
+        run: |
+          docker run --rm -v "$PWD:/src" aquasec/trivy:latest \
+            config --severity HIGH,CRITICAL --exit-code 1 /src
