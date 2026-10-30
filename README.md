@@ -90,3 +90,6 @@ Every pull request runs:
 - [ ] Stage 3: Vault + External Secrets, OPA Gatekeeper policies, signed images
 - [ ] Stage 4: OpenTelemetry tracing, Prometheus SLOs, error-budget burn-rate alerts
 - [ ] Stage 5: chaos experiments (pod kill, latency, disk fill) with post-mortems
+
+
+<img width="1341" height="650" alt="Screenshot 2026-10-30 at 1 36 35 AM" src="https://github.com/user-attachments/assets/4551e5e4-6178-4428-b3cf-425d2f915f44" />
