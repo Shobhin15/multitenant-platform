@@ -91,5 +91,6 @@ Every pull request runs:
 - [ ] Stage 4: OpenTelemetry tracing, Prometheus SLOs, error-budget burn-rate alerts
 - [ ] Stage 5: chaos experiments (pod kill, latency, disk fill) with post-mortems
 
+<img width="569" height="280" alt="make-test" src="https://github.com/user-attachments/assets/4b4fd740-2fe9-40f2-b6b5-6bc0d645d178" />
 
 <img width="1341" height="650" alt="Screenshot 2026-10-30 at 1 36 35 AM" src="https://github.com/user-attachments/assets/4551e5e4-6178-4428-b3cf-425d2f915f44" />
