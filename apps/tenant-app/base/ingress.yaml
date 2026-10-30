@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tenant-app
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: TENANT.localtest.me # each overlay sets its own host
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tenant-app
+                port:
+                  name: http

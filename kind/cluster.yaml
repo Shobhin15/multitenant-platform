@@ -1,0 +1,23 @@
+# Local 3-node cluster. kind v0.24+ ships kindnet with NetworkPolicy enforcement;
+# on older kind versions, install Calico so the tenant network policies apply.
+# Ports 80/443 on your machine map to the ingress controller.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: platform
+nodes:
+  - role: control-plane
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443
+        protocol: TCP
+  - role: worker
+  - role: worker

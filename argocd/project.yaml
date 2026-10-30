@@ -1,0 +1,22 @@
+# An AppProject fences what tenant apps may deploy and where.
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: tenants
+  namespace: argocd
+spec:
+  description: Tenant workloads. May only deploy into tenant-* namespaces.
+  sourceRepos:
+    - https://github.com/Shobhin15/multitenant-platform.git
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: tenant-*
+  # Tenants cannot create cluster-scoped objects (namespaces, CRDs, cluster roles).
+  clusterResourceWhitelist: []
+  namespaceResourceBlacklist:
+    - group: ""
+      kind: ResourceQuota
+    - group: ""
+      kind: LimitRange
+    - group: networking.k8s.io
+      kind: NetworkPolicy
