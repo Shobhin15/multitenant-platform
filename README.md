@@ -1,5 +1,6 @@
-  ![ci](https://github.com/Shobhin15/multitenant-platform/actions/workflows/ci.yaml/badge.svg)
 # Multi-Tenant Kubernetes Platform
+
+![ci](https://github.com/Shobhin15/multitenant-platform/actions/workflows/ci.yaml/badge.svg)
 
 A small, real platform that hosts several customers ("tenants") on one Kubernetes cluster while keeping them isolated from each other. Terraform onboards each tenant with its own namespace, resource quota, network policies, and RBAC. Argo CD then deploys each tenant's app from a Kustomize overlay, so onboarding a new customer is two small pull requests.
 
@@ -62,6 +63,23 @@ make down      # delete the cluster
 
 Then open http://acme.localtest.me and http://globex.localtest.me (`localtest.me` resolves to 127.0.0.1).
 
+## Proof it works
+
+`make test` checks both tenants through the ingress, then launches a pod in `tenant-acme` and tries to reach `tenant-globex`. The request times out because the network policy blocks it.
+
+```
+hello from tenant acme
+hello from tenant globex
+wget: download timed out
+PASS: cross-tenant traffic blocked
+```
+
+<img width="569" alt="make test output: both tenants respond, cross-tenant traffic blocked" src="https://github.com/user-attachments/assets/4b4fd740-2fe9-40f2-b6b5-6bc0d645d178" />
+
+Argo CD shows one Application per tenant, both Synced and Healthy:
+
+<img width="900" alt="Argo CD dashboard with tenant-app-acme and tenant-app-globex Synced and Healthy" src="https://github.com/user-attachments/assets/4551e5e4-6178-4428-b3cf-425d2f915f44" />
+
 ## Onboard a new tenant
 
 1. Add an entry to `terraform/envs/local/tenants.auto.tfvars`:
@@ -81,7 +99,7 @@ Every pull request runs:
 - `terraform fmt` and `terraform validate`
 - `kustomize build` for every overlay, validated by `kubeconform` against Kubernetes 1.30 schemas
 - `kubeconform` on the Argo CD manifests against the Argo CD CRD schemas
-- Trivy config scan for Terraform and Kubernetes misconfigurations (fails on HIGH or CRITICAL)
+- Trivy config scan for Terraform and Kubernetes misconfigurations (fails on HIGH or CRITICAL). Current result: 0 findings.
 
 ## Roadmap
 
@@ -90,7 +108,3 @@ Every pull request runs:
 - [ ] Stage 3: Vault + External Secrets, OPA Gatekeeper policies, signed images
 - [ ] Stage 4: OpenTelemetry tracing, Prometheus SLOs, error-budget burn-rate alerts
 - [ ] Stage 5: chaos experiments (pod kill, latency, disk fill) with post-mortems
-
-<img width="569" height="280" alt="make-test" src="https://github.com/user-attachments/assets/4b4fd740-2fe9-40f2-b6b5-6bc0d645d178" />
-
-<img width="1341" height="650" alt="Screenshot 2026-10-30 at 1 36 35 AM" src="https://github.com/user-attachments/assets/4551e5e4-6178-4428-b3cf-425d2f915f44" />
