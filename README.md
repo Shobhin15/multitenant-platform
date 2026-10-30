@@ -1,3 +1,4 @@
+  ![ci](https://github.com/Shobhin15/multitenant-platform/actions/workflows/ci.yaml/badge.svg)
 # Multi-Tenant Kubernetes Platform
 
 A small, real platform that hosts several customers ("tenants") on one Kubernetes cluster while keeping them isolated from each other. Terraform onboards each tenant with its own namespace, resource quota, network policies, and RBAC. Argo CD then deploys each tenant's app from a Kustomize overlay, so onboarding a new customer is two small pull requests.
